@@ -10,11 +10,10 @@ A diferencia de tecnologías de lecturas cortas (Illumina), las lecturas largas 
 * Detectar eventos de splicing alternativo
 * Distinguir isoformas canónicas de isoformas novedosas
 
-Durante el TP se trabajará con datos reales de ONT correspondientes a amplicones del gen **FMR1**, a partir de dos muestras biológicas (Sample A y Sample B) con un conjunto parcialmente compartido de isoformas. Las muestras fueron tomadas de sangre y células de granulosa ovárica de mujeres.
+Durante el TP se trabajará con datos reales de ONT correspondientes a amplicones del gen ***FMR1***, a partir de dos muestras biológicas (Sample A y Sample B) con un conjunto parcialmente compartido de isoformas. Las muestras fueron tomadas de sangre y células de granulosa ovárica de mujeres.
 
-Background:
-El gen **FMR1**, localizado en el cromosoma X, codifica la proteína **FMRP** y está involucrado en cuatro trastornos genéticos. A través del *splicing alternativo* de su ARNm, el transcripto puede generar numerosas isoformas, lo que sugiere que cada una podría tener un rol celular específico. En particular, nos interesa la **Insuficiencia ovárica primaria asociada a la fragilidad del X (FXPOI)** y el patrón de expresión de las isoformas en tejido ovárico. En estudios previos, identificamos varias isoformas durante la foliculogénesis en el
-ovario de rata, pero debido al diseño experimental no pudimos detectar todas las isoformas potencialmente expresadas. De manera similar, no existen estudios en tejidos humanos que describan todas las isoformas expresadas y sus secuencias completas. Por lo tanto, como objetivo, buscamos optimizar la detección de isoformas mediante secuenciación de lecturas largas con tecnología **Oxford Nanopore Technologies (ONT)** en sangre y células de granulosa de mujeres enroladas en un protocolo de ovodonación (no portadoras de la premutación ni la mutación de **FMR1**). Este enfoque permite secuenciar los transcriptos completos con alta sensibilidad, lo que nos brinda la posibilidad de identificar isoformas nuevas.
+Contexto:
+El gen ***FMR1*** (ENSG00000102081), localizado en el cromosoma X, codifica la proteína **FMRP** y está involucrado en cuatro trastornos genéticos. A través del *splicing alternativo* de su ARNm, el transcripto puede generar numerosas isoformas, lo que sugiere que cada una podría tener un rol celular específico. En particular, nos interesa la **Insuficiencia ovárica primaria asociada a la fragilidad del X (FXPOI)** y el patrón de expresión de las isoformas en tejido ovárico. En estudios previos, identificamos varias isoformas durante la foliculogénesis en el ovario de rata, pero debido al diseño experimental no pudimos detectar todas las isoformas potencialmente expresadas. De manera similar, no existen estudios en tejidos humanos que describan todas las isoformas expresadas y sus secuencias completas. Por lo tanto, como objetivo, buscamos optimizar la detección de isoformas mediante secuenciación de lecturas largas con tecnología **Oxford Nanopore Technologies (ONT)** en sangre y células de granulosa de mujeres enroladas en un protocolo de ovodonación (no portadoras de la premutación ni la mutación de ***FMR1***). Este enfoque permite secuenciar los transcriptos completos con alta sensibilidad, lo que nos brinda la posibilidad de identificar isoformas nuevas.
 
 ---
 
@@ -25,7 +24,7 @@ Al finalizar el TP, se espera que el/la estudiante sea capaz de:
 * Comprender el flujo general de análisis de datos de amplicon-seq con ONT
 * Alinear lecturas largas contra un genoma de referencia
 * Interpretar métricas básicas de alineamiento
-* Inferir isoformas transcriptómicas utilizando el pipeline **FLAIR**
+* Inferir isoformas transcriptómicas utilizando el pipeline de **FLAIR**
 * Comparar isoformas detectadas entre dos muestras
 * Visualizar alineamientos e isoformas en un navegador genómico (IGV)
 * Entender por qué las lecturas largas exceden las capacidades de tecnologías de lecturas cortas para este tipo de análisis
@@ -37,7 +36,7 @@ Al finalizar el TP, se espera que el/la estudiante sea capaz de:
 El repositorio del TP está organizado de la siguiente manera:
 
 ```text
-amplicon_seq/
+clase_amplicon_seq/
 ├── ref/
 │   ├── Homo_sapiens.GRCh38.dna.primary_assembly.fa
 │   ├── Homo_sapiens.GRCh38.115.gtf
@@ -71,7 +70,7 @@ Se utiliza el genoma humano **GRCh38 (Ensembl release 115)**:
 
 * Archivo FASTA: `Homo_sapiens.GRCh38.dna.primary_assembly.fa`
 
-> Para el TP se trabaja con una versión reducida del genoma, conteniendo únicamente la región correspondiente al gen **FMR1**, con el objetivo de reducir el tamaño de los archivos y el tiempo de cómputo.
+CAMBIAR SEGUN LO QUE DIGA NATY: > Para el TP se trabaja con una versión reducida del genoma, conteniendo únicamente la región correspondiente al gen **FMR1**, con el objetivo de reducir el tamaño de los archivos y el tiempo de cómputo.
 
 ### Anotaciones
 
@@ -80,6 +79,8 @@ Se utiliza el genoma humano **GRCh38 (Ensembl release 115)**:
 Este archivo contiene las anotaciones génicas y transcriptómicas utilizadas por FLAIR para corregir y colapsar isoformas.
 
 ---
+
+
 
 ## 5. Alineamiento de lecturas contra el genoma
 
