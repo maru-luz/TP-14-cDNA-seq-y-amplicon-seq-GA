@@ -1,0 +1,27 @@
+Indexo el genoma con minimap2:
+minimap2 -d Homo_sapiens.GRCh38.dna.primary_assembly.mmi Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+
+Mapeo las lecturas de cada muestra contra el genoma de referencia:
+minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_A.fastq --splice-flank yes --junc-bonus 10 -o sample_A.sam
+
+Summary de los mapeos:
+samtools flagstat sample_A.sam
+
+Conversión de los sam:
+SAM --> sorted BAM:
+samtools view -bS sample_A.sam | samtools sort -o sample_A.bam
+
+BAM --> BAM.BAI:
+samtools index sample_A.bam
+
+BAM --> BED:
+bamToBed -bed12 -i sample_A.bam > sample_A.bed
+
+FLAIR correct
+flair correct -q sample_A.bed -g Homo_sapiens.GRCh38.dna.primary_assembly.fa -f Homo_sapiens.GRCh38.115.chr.okok.gtf --output sample_A
+
+FLAIR collapse
+flair collapse --gtf Homo_sapiens.GRCh38.115.chr.okok.gtf -g Homo_sapiens.GRCh38.dna.primary_assembly.fa -q sample_A_all_corrected.bed -r sample_A.fastq --output sample_A --stringent --check_splice --generate_map
+
+FLAIR quantify
+flair quantify -r Resutados/quantify/reads_manifest_A.tsv -i sample_A.isoforms.fa --isoform_bed sample_A.isoforms.bed
