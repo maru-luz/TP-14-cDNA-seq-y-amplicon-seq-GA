@@ -13,7 +13,9 @@ A diferencia de tecnologías de lecturas cortas (Illumina), las lecturas largas 
 Durante el TP se trabajará con datos reales de ONT correspondientes a amplicones del gen ***FMR1***, a partir de dos muestras biológicas (Sample A y Sample B) con un conjunto parcialmente compartido de isoformas. Las muestras fueron tomadas de sangre y células de granulosa ovárica de mujeres.
 
 Contexto:
-El gen ***FMR1*** (ENSG00000102081), localizado en el cromosoma X, codifica la proteína **FMRP** y está involucrado en cuatro trastornos genéticos. A través del *splicing alternativo* de su ARNm, el transcripto puede generar numerosas isoformas, lo que sugiere que cada una podría tener un rol celular específico. En particular, nos interesa la **Insuficiencia ovárica primaria asociada a la fragilidad del X (FXPOI)** y el patrón de expresión de las isoformas en tejido ovárico. En estudios previos, identificamos varias isoformas durante la foliculogénesis en el ovario de rata, pero debido al diseño experimental no pudimos detectar todas las isoformas potencialmente expresadas. De manera similar, no existen estudios en tejidos humanos que describan todas las isoformas expresadas y sus secuencias completas. Por lo tanto, como objetivo, buscamos optimizar la detección de isoformas mediante secuenciación de lecturas largas con tecnología **Oxford Nanopore Technologies (ONT)** en sangre y células de granulosa de mujeres enroladas en un protocolo de ovodonación (no portadoras de la premutación ni la mutación de ***FMR1***). Este enfoque permite secuenciar los transcriptos completos con alta sensibilidad, lo que nos brinda la posibilidad de identificar isoformas nuevas.
+El gen ***FMR1*** (ENSG00000102081), localizado en el cromosoma X, codifica la proteína **FMRP** y está involucrado en cuatro trastornos genéticos. A través del *splicing alternativo* de su ARNm, el transcripto puede generar numerosas isoformas, lo que sugiere que cada una podría tener un rol celular específico. Con todos sus exones, sin ningún intrón, y desde el sitio de inicio de la traducción y hasta el sitio de *stop*, el mensajero de ***FMR1*** mide aproximaadmente 3,8 kpb. Los *primers* fueron diseñados para hibridar algunos pb rio arriba del ATG y algunos pb rio abajo del *stop*, por lo que un amplicón del mensajero completo mide un poco más de 3,9 kpb.
+
+En el laboratorio nos interesa la **Insuficiencia ovárica primaria asociada a la fragilidad del X (FXPOI)** y el patrón de expresión de las isoformas en tejido ovárico. En estudios previos, identificamos varias isoformas durante la foliculogénesis en el ovario de rata, pero debido al diseño experimental no pudimos detectar todas las isoformas potencialmente expresadas. De manera similar, no existen estudios en tejidos humanos que describan todas las isoformas expresadas y sus secuencias completas. Por lo tanto, como objetivo, buscamos optimizar la detección de isoformas mediante secuenciación de lecturas largas con tecnología **Oxford Nanopore Technologies (ONT)** en sangre y células de granulosa de mujeres enroladas en un protocolo de ovodonación (no portadoras de la premutación ni la mutación de ***FMR1***). Este enfoque permite secuenciar los transcriptos completos con alta sensibilidad, lo que nos brinda la posibilidad de identificar isoformas nuevas.
 
 ---
 
@@ -105,14 +107,14 @@ Este patrón suele indicar:
 - reads incompletas
 
 
-::contentReference[oaicite:0]{index=0}
+![Distribución con lecturas cortas](images/qc_short_reads.png)
 
 
 #### Ejemplo 2: lecturas del tamaño esperado
 Este patrón es el esperado para un experimento de amplicon-seq bien controlado, donde la mayoría de las lecturas tienen una longitud cercana al tamaño del amplicón.
 
 
-::contentReference[oaicite:1]{index=1}
+![Distribución del tamaño esperado](images/qc_long_reads.png)
 
 
 ### Filtrado por calidad y longitud
