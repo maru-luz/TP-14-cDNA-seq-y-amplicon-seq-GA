@@ -161,12 +161,7 @@ minimap2 -d Homo_sapiens.GRCh38.dna.primary_assembly.mmi Homo_sapiens.GRCh38.dna
 Las lecturas ONT se alinean utilizando parámetros *splice-aware*:
 
 ```bash
-minimap2 -ax splice \
-  Homo_sapiens.GRCh38.dna.primary_assembly.mmi \
-  reads/sample_A.fastq \
-  --splice-flank yes \
-  --junc-bonus 10 \
-  -o resultados/alineamiento/sample_A.sam
+minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi reads/sample_A.fastq --splice-flank yes --junc-bonus 10 -o resultados/alineamiento/sample_A.sam
 ```
 
 El mismo procedimiento se repite para `sample_B.fastq`.
@@ -193,7 +188,7 @@ Este comando resume:
 
 ## 7. Conversión y procesamiento de formatos
 
-### SAM → BAM ordenado
+### SAM → BAM ordenado (*sorted*)
 
 ```bash
 samtools view -bS sample_A.sam | samtools sort -o sample_A.sorted.bam
