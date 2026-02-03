@@ -35,32 +35,17 @@ Al finalizar el TP, se espera que el/la estudiante sea capaz de:
 
 ## 3. Organización del directorio de trabajo
 
-El repositorio del TP está organizado de la siguiente manera:
+La carpeta `/media/libre/datos_genomica/14_TP_RNAseq_largas/Maru/clase-amplicon-seq/` contiene varios archivos. Los que usaremos para el TP son:
 
 ```text
-clase_amplicon_seq/
-├── ref/
-│   ├── Homo_sapiens.GRCh38.dna.primary_assembly.fa
-│   ├── Homo_sapiens.GRCh38.115.gtf
-│   └── isoforms.fa
-├── reads/
-│   ├── sample_A.fastq
-│   └── sample_B.fastq
-├── resultados/
-│   ├── alineamiento/
-│   ├── correct/
-│   ├── collapse/
-│   └── quantify/
-└── scripts/
-    └── subsample.sh
+Homo_sapiens.GRCh38.115.gtf.gz
+Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+sample_A.fastq
+sample_B.fastq
 ```
 
-### Contenido de los directorios
-
-* **ref/**: archivos de referencia (genoma y anotaciones)
-* **reads/**: lecturas ONT de cada muestra
-* **resultados/**: salidas de cada etapa del pipeline
-* **scripts/**: scripts auxiliares (opcional, con fines didácticos)
+### Sugrencia:
+Crear carpetas para cada los *outputs* de cada comando (lo iremos mencionado en cada paso)
 
 ---
 
@@ -70,13 +55,11 @@ clase_amplicon_seq/
 
 Se utiliza el genoma humano **GRCh38 (Ensembl release 115)**:
 
-* Archivo FASTA: `Homo_sapiens.GRCh38.dna.primary_assembly.fa`
-
-CAMBIAR SEGUN LO QUE DIGA NATY: > Para el TP se trabaja con una versión reducida del genoma, conteniendo únicamente la región correspondiente al gen **FMR1**, con el objetivo de reducir el tamaño de los archivos y el tiempo de cómputo.
+* Archivo FASTA: `Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz`
 
 ### Anotaciones
 
-* Archivo GTF: `Homo_sapiens.GRCh38.115.gtf`
+* Archivo GTF: `Homo_sapiens.GRCh38.115.gtf.gz`
 
 Este archivo contiene las anotaciones génicas y transcriptómicas utilizadas por FLAIR para corregir y colapsar isoformas.
 
@@ -151,18 +134,18 @@ Para este ejercicio se trabajará directamente con lecturas ya seleccionadas, co
 El indexado del genoma con **minimap2** consiste en generar una estructura de datos que permite acelerar el alineamiento.
 
 ```bash
-minimap2 -d Homo_sapiens.GRCh38.dna.primary_assembly.mmi Homo_sapiens.GRCh38.dna.primary_assembly.fa
+minimap2 -d Homo_sapiens.GRCh38.dna.primary_assembly.mmi Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 ```
 
-> Para el TP, el genoma ya se provee indexado para ahorrar tiempo.
 
 ### Alineamiento de lecturas
 
 Las lecturas ONT se alinean utilizando parámetros *splice-aware*:
 
 ```bash
-minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi reads/sample_A.fastq --splice-flank yes --junc-bonus 10 -o resultados/alineamiento/sample_A.sam
+minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_A.fastq --splice-flank yes --junc-bonus 10 -o alineamientos/sample_A.sam
 ```
+> Sugerencia: crear la carpeta `alineamientos` y guardar allí los resultados de los alineamientos.
 
 El mismo procedimiento se repite para `sample_B.fastq`.
 
@@ -173,8 +156,9 @@ El mismo procedimiento se repite para `sample_B.fastq`.
 Se utilizan herramientas de **samtools** para evaluar la calidad del alineamiento:
 
 ```bash
-samtools flagstat resultados/alineamiento/sample_A.sam
+samtools flagstat sample_A.sam
 ```
+> Sugerencia: se puede guardar la salida del resumen de la siguiente manera: `samtools flagstat sample_A.sam > flagstat_sample_A.txt`
 
 Este comando resume:
 
@@ -216,25 +200,42 @@ bamToBed -bed12 -i sample_A.sorted.bam > sample_A.bed
 
 Corrige los alineamientos utilizando anotaciones conocidas:
 
+Como acá vamos a usar el archivo de anotaciones `Homo_sapiens.GRCh38.115.gtf.gz` tenemos que descomprimirlo primero:
 ```bash
-flair correct --query sample_A.bed --genome ref/Homo_sapiens.GRCh38.dna.primary_assembly.fa --gtf ref/Homo_sapiens.GRCh38.115.gtf --output resultados/correct/sample_A
+gunzip Homo_sapiens.GRCh38.115.gtf.gz
 ```
+Y luego podemos correr el comando `flair correct`
+
+```bash
+flair correct --query alinemientos/sample_A.bed --gtf Homo_sapiens.GRCh38.115.gtf --output correct/sample_A
+```
+> Sugerencia: crear la carpeta `correct` y guardar allí los resultados de este paso.
+
 
 ### FLAIR collapse
 
 Agrupa lecturas corregidas en isoformas únicas:
 
 ```bash
-flair collapse -g ref/Homo_sapiens.GRCh38.dna.primary_assembly.fa --gtf ref/Homo_sapiens.GRCh38.115.gtf -q flair.all_corrected.bed -r reads/sample_A.fastq --output resultados/collapse/sample_A --stringent --check_splice --generate_map
+flair collapse -g Homo_sapiens.GRCh38.dna.primary_assembly.fa --gtf Homo_sapiens.GRCh38.115.gtf -q correct/sample_A_all_corrected.bed -r sample_A.fastq --output collapse/sample_A --stringent --check_splice --generate_map
 ```
+> Sugerencia: crear la carpeta `collapse` y guardar allí los resultados de este paso.
+
 
 ### FLAIR quantify
 
-Cuantifica la abundancia de isoformas:
+Cuantifica la abundancia de isoformas. Primero necesitamos crear un archivo .tsv (separado por tabulaciones) que contenga la siguiente información:
+muestra    condición    batch    ruta/a/las/lecturas
+> Pueden crearlo desde el Notepad o abriendo un archivo de texto con el comando:
+> ```bash
+> nano
+
+Como en este caso estamos trabajando con las dos muestras por separado, creamos 2 reads_manifest.tsv diferentes para cada muestra. Puden poner el nombre que deseen en muestra, condición y batch, mientras respeten la ruta hacia las lecturas paracada muestra.
 
 ```bash
-flair quantify -r reads-manifest.tsv -i flair.collapsed.isoforms.fa --isoform_bed flair.collapsed.isoforms.bed
+flair quantify -r reads_manifest_A.tsv -i sample_A.isoforms.fa --isoform_bed sample_A.isoforms.bed
 ```
+> Sugerencia: crear la carpeta `quantify` y guardar allí los resultados de este paso.
 
 ---
 
@@ -246,6 +247,7 @@ Los archivos `*.sorted.bam`, `*.bai`, `*.bed` y `*.gtf` pueden cargarse en **IGV
 * Observar estructuras de exones
 * Comparar isoformas entre Sample A y Sample B
 
+Para este TP lo haremos online, pero IGV también puede usarse de manera local descargando el programa.
 Se recomienda navegar a la región del gen ***FMR1*** y discutir diferencias observadas entre las muestras.
 
 ---
