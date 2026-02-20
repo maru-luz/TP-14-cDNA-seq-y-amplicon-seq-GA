@@ -45,7 +45,7 @@ sample_B.fastq
 ```
 
 ### Sugrencia:
-Crear carpetas para cada los *outputs* de cada comando (lo iremos mencionado en cada paso)
+Crear carpetas para los *outputs* de cada comando (lo iremos mencionado en cada paso)
 
 ---
 
@@ -111,7 +111,7 @@ Este paso permite mejorar la calidad del alineamiento y la detección de isoform
 
 ### Nota para este trabajo práctico
 
-En este TP **no se realizará el paso de QC ni filtrado**, ya que estos conceptos y herramientas fueron abordados previamente en el TP de **cDNA-seq**.
+En este TP **no se realizará el paso de QC ni filtrado**, ya que estos conceptos y herramientas fueron abordados previamente en la materia.
 
 Para este ejercicio se trabajará directamente con lecturas ya seleccionadas, con el objetivo de focalizarse en:
 
@@ -148,7 +148,9 @@ minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_A.fastq 
 > Sugerencia: crear la carpeta `alineamientos` y guardar allí los resultados de los alineamientos.
 
 El mismo procedimiento se repite para `sample_B.fastq`.
-
+```bash
+minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_B.fastq --splice-flank yes --junc-bonus 10 -o alineamientos/sample_B.sam
+```
 ---
 
 ## 6. Evaluación del alineamiento
@@ -157,6 +159,10 @@ Se utilizan herramientas de **samtools** para evaluar la calidad del alineamient
 
 ```bash
 samtools flagstat sample_A.sam
+```
+
+```bash
+samtools flagstat sample_B.sam
 ```
 > Sugerencia: se puede guardar la salida del resumen de la siguiente manera: `samtools flagstat sample_A.sam > flagstat_sample_A.txt`
 
@@ -178,16 +184,28 @@ Este comando resume:
 samtools view -bS sample_A.sam | samtools sort -o sample_A.sorted.bam
 ```
 
+```bash
+samtools view -bS sample_B.sam | samtools sort -o sample_B.sorted.bam
+```
+
 ### Indexado del BAM
 
 ```bash
 samtools index sample_A.sorted.bam
 ```
 
+```bash
+samtools index sample_B.sorted.bam
+```
+
 ### Conversión a BED12
 
 ```bash
 bamToBed -bed12 -i sample_A.sorted.bam > sample_A.bed
+```
+
+```bash
+bamToBed -bed12 -i sample_B.sorted.bam > sample_B.bed
 ```
 
 > El formato BED12 es requerido por FLAIR y representa explícitamente la estructura exon–intrón de cada lectura.
@@ -209,6 +227,11 @@ Y luego podemos correr el comando `flair correct`
 ```bash
 flair correct --query alinemientos/sample_A.bed --gtf Homo_sapiens.GRCh38.115.gtf --output correct/sample_A
 ```
+
+```bash
+flair correct --query alinemientos/sample_B.bed --gtf Homo_sapiens.GRCh38.115.gtf --output correct/sample_B
+```
+
 > Sugerencia: crear la carpeta `correct` y guardar allí los resultados de este paso.
 
 
@@ -219,6 +242,11 @@ Agrupa lecturas corregidas en isoformas únicas:
 ```bash
 flair collapse -g Homo_sapiens.GRCh38.dna.primary_assembly.fa --gtf Homo_sapiens.GRCh38.115.gtf -q correct/sample_A_all_corrected.bed -r sample_A.fastq --output collapse/sample_A --stringent --check_splice --generate_map
 ```
+
+```bash
+flair collapse -g Homo_sapiens.GRCh38.dna.primary_assembly.fa --gtf Homo_sapiens.GRCh38.115.gtf -q correct/sample_B_all_corrected.bed -r sample_B.fastq --output collapse/sample_B --stringent --check_splice --generate_map
+```
+
 > Sugerencia: crear la carpeta `collapse` y guardar allí los resultados de este paso.
 
 
@@ -235,6 +263,11 @@ Como en este caso estamos trabajando con las dos muestras por separado, creamos 
 ```bash
 flair quantify -r reads_manifest_A.tsv -i sample_A.isoforms.fa --isoform_bed sample_A.isoforms.bed
 ```
+
+```bash
+flair quantify -r reads_manifest_B.tsv -i sample_B.isoforms.fa --isoform_bed sample_B.isoforms.bed
+```
+
 > Sugerencia: crear la carpeta `quantify` y guardar allí los resultados de este paso.
 
 ---
