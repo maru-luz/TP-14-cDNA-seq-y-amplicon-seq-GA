@@ -143,13 +143,13 @@ minimap2 -d Homo_sapiens.GRCh38.dna.primary_assembly.mmi Homo_sapiens.GRCh38.dna
 Las lecturas ONT se alinean utilizando parámetros *splice-aware*:
 
 ```bash
-minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_A.fastq --splice-flank yes --junc-bonus 10 -o alineamientos/sample_A.sam
+minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_A.fastq --splice-flank yes -o alineamientos/sample_A.sam
 ```
 > Sugerencia: crear la carpeta `alineamientos` y guardar allí los resultados de los alineamientos.
 
 El mismo procedimiento se repite para `sample_B.fastq`.
 ```bash
-minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_B.fastq --splice-flank yes --junc-bonus 10 -o alineamientos/sample_B.sam
+minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_B.fastq --splice-flank yes -o alineamientos/sample_B.sam
 ```
 ---
 
