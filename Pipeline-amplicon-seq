@@ -2,7 +2,7 @@ Indexo el genoma con minimap2:
 minimap2 -d Homo_sapiens.GRCh38.dna.primary_assembly.mmi Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 
 Mapeo las lecturas de cada muestra contra el genoma de referencia:
-minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_A.fastq --splice-flank yes --junc-bonus 10 -o sample_A.sam
+minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_A.fastq --splice-flank yes -o sample_A.sam
 
 Summary de los mapeos:
 samtools flagstat sample_A.sam
