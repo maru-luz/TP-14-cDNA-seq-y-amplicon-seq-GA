@@ -237,14 +237,16 @@ flair correct --query alinemientos/sample_B.bed --gtf Homo_sapiens.GRCh38.115.gt
 
 ### FLAIR collapse
 
-Agrupa lecturas corregidas en isoformas únicas:
+Como tenemos múltiples muestras, concatenamos las lecturas del .bed generadas en el paso anterior (solo las `all corrected`):
 
 ```bash
-flair collapse -g Homo_sapiens.GRCh38.dna.primary_assembly.fa --gtf Homo_sapiens.GRCh38.115.gtf -q correct/sample_A_all_corrected.bed -r sample_A.fastq --output collapse/sample_A --stringent --check_splice --generate_map
+cat correct/sample_A_all_corrected.bed correct/sample_B_all_corrected.bed > correct/sample_A_B_all_corrected.bed
 ```
 
+Luego usamos ese archivo `.bed` para agruparlas en isoformas únicas:
+
 ```bash
-flair collapse -g Homo_sapiens.GRCh38.dna.primary_assembly.fa --gtf Homo_sapiens.GRCh38.115.gtf -q correct/sample_B_all_corrected.bed -r sample_B.fastq --output collapse/sample_B --stringent --check_splice --generate_map
+flair collapse -g Homo_sapiens.GRCh38.dna.primary_assembly.fa --gtf Homo_sapiens.GRCh38.115.gtf -q correct/sample_A_B_all_corrected.bed -r sample_A.fastq sample_B.fastq --output collapse/sample_A_B --stringent --check_splice --generate_map
 ```
 
 > Sugerencia: crear la carpeta `collapse` y guardar allí los resultados de este paso.
@@ -258,14 +260,10 @@ muestra    condición    batch    ruta/a/las/lecturas
 > ```bash
 > nano
 
-Como en este caso estamos trabajando con las dos muestras por separado, creamos 2 reads_manifest.tsv diferentes para cada muestra. Puden poner el nombre que deseen en muestra, condición y batch, mientras respeten la ruta hacia las lecturas paracada muestra.
+Como en este caso estamos trabajando con las dos muestras juntas, creamos un solo reads_manifest.tsv. Puden poner el nombre que deseen en muestra, condición y batch, mientras respeten la ruta hacia las lecturas para cada muestra.
 
 ```bash
 flair quantify -r reads_manifest_A.tsv -i sample_A.isoforms.fa --isoform_bed sample_A.isoforms.bed
-```
-
-```bash
-flair quantify -r reads_manifest_B.tsv -i sample_B.isoforms.fa --isoform_bed sample_B.isoforms.bed
 ```
 
 > Sugerencia: crear la carpeta `quantify` y guardar allí los resultados de este paso.
