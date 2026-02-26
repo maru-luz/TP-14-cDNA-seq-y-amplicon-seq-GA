@@ -49,7 +49,7 @@ Crear carpetas para los *outputs* de cada comando (lo iremos mencionado en cada 
 
 ---
 
-## 4. Datos de referencia
+## 4. Archivos de referencia
 
 ### Genoma
 
@@ -153,6 +153,8 @@ minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_B.fastq 
 ```
 ---
 
+Archivos de salida: `sample_A.sam` y `sample_B.sam`
+
 ## 6. Evaluación del alineamiento
 
 Se utilizan herramientas de **samtools** para evaluar la calidad del alineamiento:
@@ -234,6 +236,7 @@ flair correct --query alinemientos/sample_B.bed --gtf Homo_sapiens.GRCh38.115.gt
 
 > Sugerencia: crear la carpeta `correct` y guardar allí los resultados de este paso.
 
+Archivos de salida (no necesariamente devuelve todos): `sample_A_all_corrected.bed`, `sample_A_all_inconsistent.bed`, `sample_A_cannot_verify.bed`, ídem muestra B.
 
 ### FLAIR collapse
 
@@ -268,11 +271,13 @@ flair quantify -r reads_manifest_A.tsv -i sample_A.isoforms.fa --isoform_bed sam
 
 > Sugerencia: crear la carpeta `quantify` y guardar allí los resultados de este paso.
 
+Archivos de salida: `sample_A_B.isoforms.bed`, `sample_A_B.isoform.read.map.txt`, `sample_A_B.isoforms.fa`, `sample_A_B.isoforms.gtf`, ídem muestra B 
+
 ---
 
 ## 9. Visualización en IGV
 
-Los archivos `*.sorted.bam`, `*.bai`, `*.bed` y `*.gtf` pueden cargarse en **IGV** para:
+Los archivos `*.sorted.bam` + `*.bai`, `*.bed` y `*.gtf` pueden cargarse en **IGV** para:
 
 * Visualizar alineamientos individuales
 * Observar estructuras de exones
