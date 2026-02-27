@@ -134,7 +134,9 @@ Para este ejercicio se trabajará directamente con lecturas ya seleccionadas, co
 El indexado del genoma con **minimap2** consiste en generar una estructura de datos que permite acelerar el alineamiento.
 
 ```bash
-minimap2 -d Homo_sapiens.GRCh38.dna.primary_assembly.mmi Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+minimap2 \
+-d Homo_sapiens.GRCh38.dna.primary_assembly.mmi \
+Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 ```
 
 
@@ -143,13 +145,23 @@ minimap2 -d Homo_sapiens.GRCh38.dna.primary_assembly.mmi Homo_sapiens.GRCh38.dna
 Las lecturas ONT se alinean utilizando parámetros *splice-aware*:
 
 ```bash
-minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_A.fastq --splice-flank yes -o alineamientos/sample_A.sam
+minimap2 \
+-ax splice \
+Homo_sapiens.GRCh38.dna.primary_assembly.mmi \
+sample_A.fastq \
+--splice-flank yes \
+-o alineamientos/sample_A.sam
 ```
 > Sugerencia: crear la carpeta `alineamientos` y guardar allí los resultados de los alineamientos.
 
 El mismo procedimiento se repite para `sample_B.fastq`.
 ```bash
-minimap2 -ax splice Homo_sapiens.GRCh38.dna.primary_assembly.mmi sample_B.fastq --splice-flank yes -o alineamientos/sample_B.sam
+minimap2 \
+-ax splice \
+Homo_sapiens.GRCh38.dna.primary_assembly.mmi \
+sample_B.fastq \
+--splice-flank yes \
+-o alineamientos/sample_B.sam
 ```
 ---
 
@@ -227,11 +239,17 @@ gunzip Homo_sapiens.GRCh38.115.gtf.gz
 Y luego podemos correr el comando `flair correct`
 
 ```bash
-flair correct --query alinemientos/sample_A.bed --gtf Homo_sapiens.GRCh38.115.gtf --output correct/sample_A
+flair correct \
+--query alinemientos/sample_A.bed \
+--gtf Homo_sapiens.GRCh38.115.gtf \
+--output correct/sample_A
 ```
 
 ```bash
-flair correct --query alinemientos/sample_B.bed --gtf Homo_sapiens.GRCh38.115.gtf --output correct/sample_B
+flair correct \
+--query alinemientos/sample_B.bed \
+--gtf Homo_sapiens.GRCh38.115.gtf \
+--output correct/sample_B
 ```
 
 > Sugerencia: crear la carpeta `correct` y guardar allí los resultados de este paso.
@@ -243,13 +261,24 @@ Archivos de salida (no necesariamente devuelve todos): `sample_A_all_corrected.b
 Como tenemos múltiples muestras, concatenamos las lecturas del .bed generadas en el paso anterior (solo las `all corrected`):
 
 ```bash
-cat correct/sample_A_all_corrected.bed correct/sample_B_all_corrected.bed > correct/sample_A_B_all_corrected.bed
+cat \
+correct/sample_A_all_corrected.bed \
+correct/sample_B_all_corrected.bed \
+> correct/sample_A_B_all_corrected.bed
 ```
 
 Luego usamos ese archivo `.bed` para agruparlas en isoformas únicas:
 
 ```bash
-flair collapse -g Homo_sapiens.GRCh38.dna.primary_assembly.fa --gtf Homo_sapiens.GRCh38.115.gtf -q correct/sample_A_B_all_corrected.bed -r sample_A.fastq sample_B.fastq --output collapse/sample_A_B --stringent --check_splice --generate_map
+flair collapse \
+-g Homo_sapiens.GRCh38.dna.primary_assembly.fa \
+--gtf Homo_sapiens.GRCh38.115.gtf \
+-q correct/sample_A_B_all_corrected.bed \
+-r sample_A.fastq sample_B.fastq \
+--output collapse/sample_A_B \
+--stringent \
+--check_splice \
+--generate_map
 ```
 
 > Sugerencia: crear la carpeta `collapse` y guardar allí los resultados de este paso.
@@ -266,7 +295,10 @@ muestra    condición    batch    ruta/a/las/lecturas
 Como en este caso estamos trabajando con las dos muestras juntas, creamos un solo reads_manifest.tsv. Puden poner el nombre que deseen en muestra, condición y batch, mientras respeten la ruta hacia las lecturas para cada muestra.
 
 ```bash
-flair quantify -r reads_manifest_A.tsv -i sample_A.isoforms.fa --isoform_bed sample_A.isoforms.bed
+flair quantify \
+-r reads_manifest_A.tsv \
+-i sample_A.isoforms.fa \
+--isoform_bed sample_A.isoforms.bed
 ```
 
 > Sugerencia: crear la carpeta `quantify` y guardar allí los resultados de este paso.
