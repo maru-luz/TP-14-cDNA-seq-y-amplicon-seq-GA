@@ -35,31 +35,26 @@ Al finalizar el TP, se espera que el/la estudiante sea capaz de:
 
 ## 3. Organización del directorio de trabajo
 
-La carpeta `/media/libre/datos_genomica/14_TP_RNAseq_largas/Maru/clase-amplicon-seq/` contiene varios archivos. Los que usaremos para el TP son:
+La carpeta `/media/libre/datos_genomica/14_TP_RNAseq_largas/cDNASeq/` contiene los archivos a utilizar:
 
 ```text
-Homo_sapiens.GRCh38.115.gtf.gz
-Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
-sample_A.fastq
-sample_B.fastq
+Homo_sapiens.GRCh38.114.gtf
+AD_1.tsv
+AD_2.tsv
+AD_3.tsv
+A10_1.tsv
+A10_2.tsv
+A10_3.tsv
+TP_GA.R
 ```
-
-### Sugrencia:
-Crear carpetas para los *outputs* de cada comando (lo iremos mencionado en cada paso)
 
 ---
 
 ## 4. Datos de referencia
 
-### Genoma
-
-Se utiliza el genoma humano **GRCh38 (Ensembl release 115)**:
-
-* Archivo FASTA: `Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz`
-
 ### Anotaciones
 
-* Archivo GTF: `Homo_sapiens.GRCh38.115.gtf.gz`
+* Archivo GTF: `Homo_sapiens.GRCh38.114.gtf.gz`
 
 Este archivo contiene las anotaciones génicas y transcriptómicas utilizadas por FLAIR para corregir y colapsar isoformas.
 
